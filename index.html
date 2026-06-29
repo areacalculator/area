@@ -3,21 +3,21 @@
 <meta content='width=device-width, initial-scale=1' name='viewport'/>
 <meta charset='utf-8'/><meta http-equiv='content-language' content='en-gb'/>
 <meta content='IE=edge' http-equiv='X-UA-Compatible'/>
-<title>AreaCalculator - Land Area Calculator</title>
-<meta content='AreaCalculator: calculate land or field area by dividing it into triangles and summing triangle areas. Supports m², ft², acres, hectares and exportable results.' name='description'/>
+<title>AreaSolver - Land Area Solver</title>
+<meta content='AreaSolver: calculate land or field area by dividing it into triangles and summing triangle areas. Supports m², ft², acres, hectares and exportable results.' name='description'/>
 <link href='/' rel='canonical'/>
 <meta content='index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1' name='robots'/>
-<meta content='AreaCalculator' name='author'/>
+<meta content='AreaSolver' name='author'/>
 <meta content='#2a6e4d' name='theme-color'/>
 <meta content='en_US' property='og:locale'/>
-<meta content='AreaCalculator' property='og:site_name'/>
+<meta content='AreaSolver' property='og:site_name'/>
 <meta content='website' property='og:type'/>
-<meta content='AreaCalculator — Land Area Calculator by Triangulation' property='og:title'/>
-<meta content='AreaCalculator: calculate land or field area by dividing it into triangles and summing triangle areas. Supports m², ft², acres, hectares and exportable results.' property='og:description'/>
+<meta content='AreaSolver — Land Area Solver by Triangulation' property='og:title'/>
+<meta content='AreaSolver: calculate land or field area by dividing it into triangles and summing triangle areas. Supports m², ft², acres, hectares and exportable results.' property='og:description'/>
 <meta content='/' property='og:url'/>
 <meta content='/android-chrome-192x192.png' property='og:image'/>
 <meta content='summary_large_image' name='twitter:card'/>
-<meta content='AreaCalculator — Land Area Calculator by Triangulation' name='twitter:title'/>
+<meta content='AreaSolver — Land Area Solver by Triangulation' name='twitter:title'/>
 <meta content='Calculate land area by dividing a plot into triangles and summing their areas.' name='twitter:description'/>
 <meta content='/path/to/og-image.png' name='twitter:image'/>
 <link href="https://fonts.googleapis.com" rel="preconnect" crossorigin />
@@ -37,7 +37,7 @@
   {
     "@context":"https://schema.org",
     "@type":"WebSite",
-    "name":"AreaCalculator",
+    "name":"AreaSolver",
     "url":"/",
     "potentialAction":{
       "@type":"SearchAction",
@@ -50,7 +50,7 @@
   {
     "@context":"https://schema.org",
     "@type":"WebApplication",
-    "name":"AreaCalculator",
+    "name":"AreaSolver",
     "url":"/",
     "description":"Calculate land area by triangulation; supports multiple units and export.",
     "applicationCategory":"Utilities"
@@ -60,7 +60,7 @@
 <body>
 <div class='main-card'>
 <div class='app-header'>
-<h1><i class='fas fa-draw-polygon'></i>AreaCalculator - Land Area Calculator</h1>
+<h1><i class='fas fa-draw-polygon'></i>AreaSolver - Land Area Solver</h1>
 <span class='badge'><i class='fas fa-ruler-combined'></i> Heron &#183; ft/in</span>
 <div class='file-operations'>
 <button class='btn btn-accent' id='importJsonBtn'><i class='fas fa-upload'></i> Import JSON</button>
@@ -108,7 +108,7 @@
 </div>
 <div class='action-bar'>
 <div class='btn-group'>
-<button class='btn btn-primary' id='calculateBtn'><i class='fas fa-calculator'></i> Calculate</button>
+<button class='btn btn-primary' id='calculateBtn'><i class='fas fa-Solver'></i> Calculate</button>
 <button class='btn' id='clearBtn'><i class='fas fa-eraser'></i> Clear</button>
 <button class='btn btn-primary' id='addToHistoryBtn'><i class='fas fa-plus-circle'></i> Add to History</button>
 </div>
@@ -192,7 +192,7 @@
   function ch(){ if(confirm('Clear all history?')){ t=[]; u=-1; stl(); rht(); } }
   function caf(){ a.value='0'; b.value='0'; c.value='0'; d.value='0'; e.value='0'; f.value='0'; x(); cc(); }
   function ee(){ var rows=[['#','Side A','Side B','Side C','Area (sq.ft)']]; var total=0; for(var i=0;i<=u;i++){ var r=t[i]; rows.push([i+1, r.sideA, r.sideB, r.sideC, r.area.toFixed(2)]); total+=r.area; } if(u>=0) rows.push(['','','','TOTAL', total.toFixed(2)]); var wb=XLSX.utils.book_new(); var ws=XLSX.utils.aoa_to_sheet(rows); XLSX.utils.book_append_sheet(wb, ws, 'LandArea'); XLSX.writeFile(wb, 'areaCalc247_'+new Date().toISOString().slice(0,10)+'.xlsx'); }
-  function ep(){ var doc=new window.jspdf.jsPDF(); doc.setFontSize(16); doc.text('AreaCalculator - Land Area Report',14,20); var head=[['#','Side A','Side B','Side C','Area (sq.ft)']]; var body=[]; var total=0; for(var i=0;i<=u;i++){ var r=t[i]; body.push([i+1, r.sideA, r.sideB, r.sideC, r.area.toFixed(2)]); total+=r.area; } if(u>=0) body.push(['','','','TOTAL', total.toFixed(2)]); doc.autoTable({head:head, body:body, startY:30}); var finalY=doc.lastAutoTable.finalY+15; var conv=z(total); doc.setFontSize(12); doc.text('Total Area: '+total.toFixed(2)+' sq ft  · '+conv.kanal+' Kanal '+conv.marla+' Marla',14,finalY); doc.save('areaCalc247_'+new Date().toISOString().slice(0,10)+'.pdf'); }
+  function ep(){ var doc=new window.jspdf.jsPDF(); doc.setFontSize(16); doc.text('AreaSolver - Land Area Report',14,20); var head=[['#','Side A','Side B','Side C','Area (sq.ft)']]; var body=[]; var total=0; for(var i=0;i<=u;i++){ var r=t[i]; body.push([i+1, r.sideA, r.sideB, r.sideC, r.area.toFixed(2)]); total+=r.area; } if(u>=0) body.push(['','','','TOTAL', total.toFixed(2)]); doc.autoTable({head:head, body:body, startY:30}); var finalY=doc.lastAutoTable.finalY+15; var conv=z(total); doc.setFontSize(12); doc.text('Total Area: '+total.toFixed(2)+' sq ft  · '+conv.kanal+' Kanal '+conv.marla+' Marla',14,finalY); doc.save('areaCalc247_'+new Date().toISOString().slice(0,10)+'.pdf'); }
   function ej(){ var data={history:t.slice(0,u+1), exportDate:new Date().toISOString()}; var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='areaCalc247_export_'+new Date().toISOString().slice(0,10)+'.json'; a.click(); }
   function im(file){ var reader=new FileReader(); reader.onload=function(e){ try{ var imported=JSON.parse(e.target.result); if(imported.history&&Array.isArray(imported.history)){ t=imported.history; u=t.length-1; stl(); rht(); alert('History imported successfully.'); }else{ alert('Invalid file structure.'); } }catch(ex){ alert('Error parsing JSON.'); } }; reader.readAsText(file); }
   function init(){ 
