@@ -54,240 +54,164 @@
   }
   </script>
 </head>
-  <body>
-
-<div class="main-card">
-
-  <div class="app-header">
-    <h1><i class="fas fa-draw-polygon"></i>AreaSolver</h1>
-    <span class="badge"><i class="fas fa-map"></i> Field map Plotter</span>
-    <div class="header-tools">
-      <button class="btn btn-accent" id="sampleBtn" title="Load the 3-triangle demo">
-        <i class="fas fa-flask"></i> Sample
-      </button>
-      <button class="btn btn-accent" id="importBtn" aria-label="Import project">
-        <i class="fas fa-upload"></i> Import
-      </button>
-      <input accept=".json,application/json" class="hidden" id="fileInput" type="file"/>
-      <button class="btn btn-accent" id="exportJsonBtn" aria-label="Export project">
-        <i class="fas fa-download"></i> Export
-      </button>
-    </div>
-  </div>
-
-  <div class="workspace">
-    <div style="display:flex;flex-direction:column;gap:14px;min-width:0;">
-      <div class="panel">
-        <div class="panel-head">
-          <h3><i class="fas fa-vector-square"></i> Add Triangle</h3>
-          <label style="font-size:.68rem;font-weight:600;color:#64748b;display:flex;align-items:center;gap:4px;">
-            Match
-            <select class="tol-select" id="tolSelect" aria-label="Chain match tolerance">
-              <option value="0.01">Strict (0.01 ft)</option>
-              <option value="0.05" selected>Normal (0.05 ft)</option>
-              <option value="0.5">Loose (0.5 ft)</option>
-            </select>
-          </label>
-        </div>
-
-        <div class="attach-bar" id="attachBar">
-          <i class="fas fa-link"></i>
-          <span id="attachText">Starting triangle — set the first edge</span>
-          <span class="len" id="attachLen"></span>
-        </div>
-
-        <label class="flip-row" title="Place the new triangle on the same side of the attach edge as the parent triangle.">
-          <input type="checkbox" id="flipSideToggle"/>
-          <span>Flip: place new triangle on same side as parent</span>
-        </label>
-
-        <div class="sides-stack">
-          <div class="side-card" id="cardA">
-            <div class="side-head">
-              <i class="fas fa-link" style="color:#2b7a57;font-size:.85rem;"></i> Side A
-              <span class="auto-badge" id="badgeAuto"><i class="fas fa-magic"></i> auto</span>
-              <span class="lock-badge"><i class="fas fa-lock"></i> locked</span>
-            </div>
-            <div class="input-row">
-              <div class="input-field">
-                <input type="number" inputmode="decimal" step="any" min="0" id="aFeet" placeholder="0" aria-label="Side A feet"/>
-                <span>ft</span>
-                <button class="field-clear" data-target="aFeet" aria-label="Clear feet" type="button">×</button>
-              </div>
-              <div class="input-field">
-                <input type="number" inputmode="decimal" step="any" min="0" id="aInches" placeholder="0" aria-label="Side A inches"/>
-                <span>in</span>
-                <button class="field-clear" data-target="aInches" aria-label="Clear inches" type="button">×</button>
-              </div>
-            </div>
-            <div class="side-total" id="aHint">→ 0.000 ft</div>
-          </div>
-
-          <div class="side-card">
-            <div class="side-head"><i class="fas fa-vector-square" style="color:#2b7a57;font-size:.85rem;"></i> Side B</div>
-            <div class="input-row">
-              <div class="input-field">
-                <input type="number" inputmode="decimal" step="any" min="0" id="bFeet" placeholder="0" aria-label="Side B feet"/>
-                <span>ft</span>
-                <button class="field-clear" data-target="bFeet" aria-label="Clear feet" type="button">×</button>
-              </div>
-              <div class="input-field">
-                <input type="number" inputmode="decimal" step="any" min="0" id="bInches" placeholder="0" aria-label="Side B inches"/>
-                <span>in</span>
-                <button class="field-clear" data-target="bInches" aria-label="Clear inches" type="button">×</button>
-              </div>
-            </div>
-            <div class="side-total" id="bHint">→ 0.000 ft</div>
-          </div>
-
-          <div class="side-card">
-            <div class="side-head"><i class="fas fa-vector-square" style="color:#2b7a57;font-size:.85rem;"></i> Side C</div>
-            <div class="input-row">
-              <div class="input-field">
-                <input type="number" inputmode="decimal" step="any" min="0" id="cFeet" placeholder="0" aria-label="Side C feet"/>
-                <span>ft</span>
-                <button class="field-clear" data-target="cFeet" aria-label="Clear feet" type="button">×</button>
-              </div>
-              <div class="input-field">
-                <input type="number" inputmode="decimal" step="any" min="0" id="cInches" placeholder="0" aria-label="Side C inches"/>
-                <span>in</span>
-                <button class="field-clear" data-target="cInches" aria-label="Clear inches" type="button">×</button>
-              </div>
-            </div>
-            <div class="side-total" id="cHint">→ 0.000 ft</div>
-          </div>
-        </div>
-
-        <div class="action-bar-top">
-          <button class="btn" id="calculateBtn"><i class="fas fa-calculator"></i> Calculate</button>
-          <button class="btn" id="clearInputsBtn"><i class="fas fa-eraser"></i> Clear</button>
-        </div>
-
-        <div class="preview-box" id="previewBox">
-          <div class="preview-label"><i class="fas fa-calculator"></i> Current Triangle Result</div>
-          <div class="preview-placeholder" id="previewPlaceholder">
-            <i class="fas fa-arrow-up"></i>
-            <span>Enter all three sides and click <b>Calculate</b> to see the area.</span>
-          </div>
-          <div class="preview-content hidden" id="previewContent">
-            <div class="preview-main">
-              <div class="preview-area"><span id="curArea">0.00</span><small>ft²</small></div>
-              <div class="preview-chips">
-                <span class="chip"><i class="fas fa-globe"></i> <span id="curSqm">0.00</span> m²</span>
-                <span class="chip"><i class="fas fa-tree"></i> <span id="curAcres">0.0000</span> ac</span>
-              </div>
-            </div>
-            <div class="preview-meta">
-              <span><i class="fas fa-border-all"></i> Perimeter <strong id="curPerim">0.00</strong> ft</span>
-              <span id="curSidesMeta"></span>
-            </div>
-          </div>
-          <div class="preview-error" id="curError"></div>
-        </div>
-
-        <div class="action-bar-bottom">
-          <div class="editing-banner hidden" id="editingBanner">
-            <i class="fas fa-pen"></i>
-            <span>Editing Triangle <b id="editingNum">#1</b></span>
-            <button class="btn btn-icon" id="cancelEditBtn" title="Cancel editing" type="button">
-              <i class="fas fa-times"></i> Cancel
-            </button>
-          </div>
-          <button class="btn btn-primary" id="addBtn" disabled>
-            <i class="fas fa-plus-circle" id="addBtnIcon"></i>
-            <span id="addBtnLabel">Add &amp; Plot</span>
-          </button>
-          <div class="add-hint" id="addHint">
-            Click <b>Calculate</b> first to enable this button.
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="section-head">
-          <h3><i class="fas fa-list-ol"></i> Triangle Chain</h3>
-          <div class="tools">
-            <button class="btn btn-icon" id="undoBtn" disabled title="Undo (Ctrl+Z)" aria-label="Undo"><i class="fas fa-undo"></i></button>
-            <button class="btn btn-icon" id="redoBtn" disabled title="Redo (Ctrl+Shift+Z)" aria-label="Redo"><i class="fas fa-redo"></i></button>
-            <button class="btn btn-icon" id="clearAllBtn" title="Clear all" aria-label="Clear all"><i class="fas fa-trash-alt"></i></button>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th style="width:26px;">#</th>
-                <th>A (shared)</th>
-                <th>B</th>
-                <th>C (outgoing)</th>
-                <th style="text-align:right;">Area ft²</th>
-                <th style="width:98px;"></th>
-              </tr>
-            </thead>
-            <tbody id="chainBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:14px;min-width:0;">
-      <div class="panel plot-panel">
-        <div class="section-head">
-          <h3><i class="fas fa-map-marked-alt"></i> Land Plot</h3>
-          <span class="chip" id="plotChip"><i class="fas fa-shapes"></i> 0 triangles</span>
-        </div>
-
-        <div class="plot-tools">
-          <label><input type="checkbox" id="gridToggle" checked/> Grid</label>
-          <label><input type="checkbox" id="bearingToggle"/> Bearings</label>
-          <label><input type="checkbox" id="scaleToggle" checked/> Scale</label>
-          <button class="btn btn-icon" id="resetViewBtn" title="Reset view"><i class="fas fa-crosshairs"></i></button>
-          <span class="chip" id="zoomChip" style="margin-left:auto;"><i class="fas fa-search"></i> 100%</span>
-        </div>
-
-        <div class="plot-wrap" id="plotWrap">
-          <svg id="plot" preserveAspectRatio="xMidYMid meet"></svg>
-          <div class="plot-hint" id="plotHint"><i class="fas fa-mouse-pointer"></i> Tap an edge to attach</div>
-          <svg class="plot-north" viewBox="0 0 40 50" aria-hidden="true">
-            <polygon points="20,3 28,41 20,33 12,41" fill="#0f3d29"/>
-            <polygon points="20,3 20,33 12,41" fill="#2b7a57"/>
-            <text x="20" y="49" text-anchor="middle" font-family="Helvetica, Arial, sans-serif"
-                  font-size="9" font-weight="700" fill="#0f3d29">N</text>
-          </svg>
-          <div class="plot-legend hidden" id="plotLegend"></div>
-          <div class="plot-empty" id="plotEmpty">
-            <i class="fas fa-draw-polygon"></i>
-            <span>Enter the first triangle's sides to begin</span>
-          </div>
-        </div>
-
-        <div class="results-panel">
-          <div class="results-head"><i class="fas fa-chart-pie"></i> Total Area Summary</div>
-          <table class="results-table">
-            <thead><tr><th>Unit</th><th>Value</th></tr></thead>
-            <tbody id="resultsBody">
-              <tr><td colspan="2" class="results-empty">Add at least one triangle to see the total area breakdown.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="export-row">
-    <button class="btn btn-success" id="exportExcelBtn"><i class="fas fa-file-excel"></i> Excel</button>
-    <button class="btn btn-danger" id="exportPdfBtn"><i class="fas fa-file-pdf"></i> PDF report</button>
-    <button class="btn" id="exportPngBtn"><i class="fas fa-image"></i> Plot PNG</button>
-    <button class="btn" id="printBtn"><i class="fas fa-print"></i> Print</button>
-  </div>
-
-  <div class="footer-note">
-    <i class="fas fa-info-circle"></i>
-    Each new triangle's Side A must equal the length of the edge it attaches to.
-    Tap any exposed edge in the plot to branch a new triangle off it. Click ✎ to edit a triangle, ⇄ to mirror it, × to delete it.
-    1 Kanal = 20 Marla · 1 Marla = 272.25 square feet
-  </div>
-
+<body>
+<div class='main-card'>
+<div class='app-header'>
+<h1><i class='fas fa-draw-polygon'></i>AreaSolver - Land Area Calculator</h1>
+<span class='badge'><i class='fas fa-ruler-combined'></i> Heron &#183; ft/in</span>
+<div class='file-operations'>
+<button class='btn btn-accent' id='importJsonBtn'><i class='fas fa-upload'></i> Import JSON</button>
+<input accept='.json,application/json' class='hidden' id='fileImportInput' type='file'/>
+<button class='btn btn-accent' id='exportJsonBtn'><i class='fas fa-download'></i> Export JSON</button>
 </div>
+</div>
+<div class='sides-grid'>
+<div class='side-card'>
+<div class='side-title'><i class='fas fa-vector-square'></i> Side A</div>
+<div class='input-group'>
+<label for='aFeet'>Feet</label>
+<div class='input-field'><input aria-label='Side A feet' id='aFeet' min='0' step='1' type='number' value='0'/><span>ft</span></div>
+</div>
+<div class='input-group'>
+<label for='aInches'>Inches</label>
+<div class='input-field'><input aria-label='Side A inches' id='aInches' min='0' step='0.01' type='number' value='0'/><span>in</span></div>
+</div>
+<div class='total-hint' id='aHint'>&#8594; 0.00 ft</div>
+</div>
+<div class='side-card'>
+<div class='side-title'><i class='fas fa-vector-square'></i> Side B</div>
+<div class='input-group'>
+<label for='bFeet'>Feet</label>
+<div class='input-field'><input aria-label='Side B feet' id='bFeet' min='0' step='1' type='number' value='0'/><span>ft</span></div>
+</div>
+<div class='input-group'>
+<label for='bInches'>Inches</label>
+<div class='input-field'><input aria-label='Side B inches' id='bInches' min='0' step='0.01' type='number' value='0'/><span>in</span></div>
+</div>
+<div class='total-hint' id='bHint'>&#8594; 0.00 ft</div>
+</div>
+<div class='side-card'>
+<div class='side-title'><i class='fas fa-vector-square'></i> Side C</div>
+<div class='input-group'>
+<label for='cFeet'>Feet</label>
+<div class='input-field'><input aria-label='Side C feet' id='cFeet' min='0' step='1' type='number' value='0'/><span>ft</span></div>
+</div>
+<div class='input-group'>
+<label for='cInches'>Inches</label>
+<div class='input-field'><input aria-label='Side C inches' id='cInches' min='0' step='0.01' type='number' value='0'/><span>in</span></div>
+</div>
+<div class='total-hint' id='cHint'>&#8594; 0.00 ft</div>
+</div>
+</div>
+<div class='action-bar'>
+<div class='btn-group'>
+<button class='btn btn-primary' id='calculateBtn'><i class='fas fa-calculator'></i> Calculate</button>
+<button class='btn' id='clearBtn'><i class='fas fa-eraser'></i> Clear</button>
+<button class='btn btn-primary' id='addToHistoryBtn'><i class='fas fa-plus-circle'></i> Add to History</button>
+</div>
+</div>
+<div class='result-panel' id='currentResultPanel'>
+<div class='area-display'>
+<div class='main-area'><span id='currentAreaSqFt'>0.00</span>
+<small>sq ft</small></div>
+<div class='alt-units'>
+<span class='alt-unit-item'><i class='fas fa-globe'></i>
+<span id='currentAreaSqM'>0.00</span> m&#178;</span>
+<span class='alt-unit-item'><i class='fas fa-tree'></i>
+<span id='currentAreaAcres'>0.0000</span> acres</span>
+</div>
+</div>
+<div class='perimeter-row'>
+<span><i class='fas fa-border-all'></i> Perimeter: <strong id='currentPerimeterFt'>0.00</strong> ft</span>
+<span id='currentSidesDisplay'>A: 0'0"  B: 0'0"  C: 0'0"</span>
+</div>
+<div class='error-msg' id='currentError'></div>
+</div>
+<div class='history-header'>
+<h3><i class='fas fa-history'></i> Measurement History</h3>
+<div class='btn-group'>
+<button class='btn' id='undoBtn'><i class='fas fa-undo'></i> Undo</button>
+<button class='btn' id='redoBtn'><i class='fas fa-redo'></i> Redo</button>
+<button class='btn' id='clearHistoryBtn'><i class='fas fa-trash-alt'></i> Clear All</button>
+</div>
+</div>
+<div class='table-wrapper'>
+<table id='historyTable'>
+<thead>
+<tr><th>#</th><th>Side A</th><th>Side B</th><th>Side C</th><th>Area (sq.ft)</th></tr>
+</thead>
+<tbody id='historyBody'></tbody>
+</table>
+</div>
+<div class='conversion-box' id='conversionBox'>
+<span><i class='fas fa-cubes'></i> Total area: <strong id='totalSqFtSummary'>0.00</strong> sq ft</span>
+<span><i class='fas fa-landmark'></i>
+<span id='kanalMarlaDisplay'>0 Kanal &#183; 0 Marla</span></span>
+</div>
+<div class='export-buttons'>
+<button class='btn btn-success' id='exportExcelBtn'><i class='fas fa-file-excel'></i> Export Excel</button>
+<button class='btn btn-danger' id='exportPdfBtn'><i class='fas fa-file-pdf'></i> Export PDF</button>
+</div>
+<div class='footer-note'>
+<i class='fas fa-check-circle'></i> Import/Export JSON &#183; Kanal/Marla (20 marla = 1 kanal, 1 marla &#8776; 272.25 sq ft)
+  </div>
+</div>
+<script type='text/javascript'>
+(function(){
+  "use strict";
+  const q=272.25, r=20;
+  const a=document.getElementById('aFeet'), b=document.getElementById('aInches'), c=document.getElementById('bFeet'), d=document.getElementById('bInches'), e=document.getElementById('cFeet'), f=document.getElementById('cInches');
+  const g=document.getElementById('aHint'), h=document.getElementById('bHint'), i=document.getElementById('cHint');
+  const j=document.getElementById('currentAreaSqFt'), k=document.getElementById('currentAreaSqM'), l=document.getElementById('currentAreaAcres'), m=document.getElementById('currentPerimeterFt'), n=document.getElementById('currentSidesDisplay'), o=document.getElementById('currentError');
+  const p=document.getElementById('historyBody'), q2=document.getElementById('totalSqFtSummary'), r2=document.getElementById('kanalMarlaDisplay'), s=document.getElementById('addToHistoryBtn');
+  let t=[], u=-1, v=null;
+  function w(x,y){ return (parseFloat(x.value)||0)+(parseFloat(y.value)||0)/12; }
+  function x(){ g.textContent='→ '+w(a,b).toFixed(3)+' ft'; h.textContent='→ '+w(c,d).toFixed(3)+' ft'; i.textContent='→ '+w(e,f).toFixed(3)+' ft'; }
+  function y(a2,b2,c2){ return a2>0&&b2>0&&c2>0&&a2+b2>c2&&a2+c2>b2&&b2+c2>a2; }
+  function z(sq){ var m2=sq/q, kan=Math.floor(m2/r), mar=Math.floor(m2%r), rem=sq-(kan*r+mar)*q; return {kanal:kan, marla:mar, sqFtRemainder:rem}; }
+  function cc(){
+    var a2=w(a,b), b2=w(c,d), c2=w(e,f);
+    x();
+    s.disabled=false;
+    if(!y(a2,b2,c2)){ o.style.display='block'; o.textContent='⚠️ Invalid triangle: sides must satisfy triangle inequality and be >0.'; j.textContent='0.00'; k.textContent='0.00'; l.textContent='0.0000'; m.textContent='0.00'; n.textContent='A: '+a.value+"'"+b.value+'"  B: '+c.value+"'"+d.value+'"  C: '+e.value+"'"+f.value+'"'; v=null; return; }
+    o.style.display='none';
+    var per=a2+b2+c2, s2=per/2, area=Math.sqrt(s2*(s2-a2)*(s2-b2)*(s2-c2)), sqM=area*0.092903, acres=area/43560;
+    var sA=a.value+"'"+b.value+'" ('+a2.toFixed(2)+' ft)', sB=c.value+"'"+d.value+'" ('+b2.toFixed(2)+' ft)', sC=e.value+"'"+f.value+'" ('+c2.toFixed(2)+' ft)';
+    v={sideA:sA, sideB:sB, sideC:sC, area:area, perimeter:per, sqM:sqM, acres:acres, sidesShort:'A: '+a.value+"'"+b.value+'"  B: '+c.value+"'"+d.value+'"  C: '+e.value+"'"+f.value+'"', aFeetRaw:a.value, aInchRaw:b.value, bFeetRaw:c.value, bInchRaw:d.value, cFeetRaw:e.value, cInchRaw:f.value};
+    j.textContent=area.toFixed(2); k.textContent=sqM.toFixed(2); l.textContent=acres.toFixed(4); m.textContent=per.toFixed(2); n.textContent=v.sidesShort;
+  }
+  function stl(){ localStorage.setItem('areaCalc247History', JSON.stringify(t)); }
+  function lfl(){ var d2=localStorage.getItem('areaCalc247History'); if(d2){ try{t=JSON.parse(d2);}catch(e){t=[];} } u=t.length-1; rht(); }
+  function rht(){ var html='', total=0, end=u>=0?u:-1; for(var i=0;i<=end;i++){ var rec=t[i]; total+=rec.area; html+='<tr><td>'+(i+1)+'</td><td>'+rec.sideA+'</td><td>'+rec.sideB+'</td><td>'+rec.sideC+'</td><td>'+rec.area.toFixed(2)+'</td></tr>'; } if(end>=0){ html+='<tr class="total-row"><td colspan="4"><strong>TOTAL AREA</strong></td><td><strong>'+total.toFixed(2)+'</strong></td></tr>'; }else{ html='<tr><td colspan="5" style="text-align:center; padding:20px;">No history yet. Add calculations.</td></tr>'; } p.innerHTML=html; q2.textContent=total.toFixed(2); var conv=z(total); r2.textContent=conv.kanal+' Kanal · '+conv.marla+' Marla · '+conv.sqFtRemainder.toFixed(2)+' sq ft'; }
+  function ath(){ if(!v){ alert('Calculate a valid triangle first.'); return; } if(u<t.length-1){ t=t.slice(0,u+1); } t.push({...v}); u=t.length-1; stl(); rht(); s.disabled=true; }
+  function ud(){ if(u>-1){ u--; rht(); stl(); } }
+  function rd(){ if(u<t.length-1){ u++; rht(); stl(); } }
+  function ch(){ if(confirm('Clear all history?')){ t=[]; u=-1; stl(); rht(); } }
+  function caf(){ a.value='0'; b.value='0'; c.value='0'; d.value='0'; e.value='0'; f.value='0'; x(); cc(); }
+  function ee(){ var rows=[['#','Side A','Side B','Side C','Area (sq.ft)']]; var total=0; for(var i=0;i<=u;i++){ var r=t[i]; rows.push([i+1, r.sideA, r.sideB, r.sideC, r.area.toFixed(2)]); total+=r.area; } if(u>=0) rows.push(['','','','TOTAL', total.toFixed(2)]); var wb=XLSX.utils.book_new(); var ws=XLSX.utils.aoa_to_sheet(rows); XLSX.utils.book_append_sheet(wb, ws, 'LandArea'); XLSX.writeFile(wb, 'areaCalc247_'+new Date().toISOString().slice(0,10)+'.xlsx'); }
+  function ep(){ var doc=new window.jspdf.jsPDF(); doc.setFontSize(16); doc.text('AreaSolver - Land Area Report',14,20); var head=[['#','Side A','Side B','Side C','Area (sq.ft)']]; var body=[]; var total=0; for(var i=0;i<=u;i++){ var r=t[i]; body.push([i+1, r.sideA, r.sideB, r.sideC, r.area.toFixed(2)]); total+=r.area; } if(u>=0) body.push(['','','','TOTAL', total.toFixed(2)]); doc.autoTable({head:head, body:body, startY:30}); var finalY=doc.lastAutoTable.finalY+15; var conv=z(total); doc.setFontSize(12); doc.text('Total Area: '+total.toFixed(2)+' sq ft  · '+conv.kanal+' Kanal '+conv.marla+' Marla',14,finalY); doc.save('areaCalc247_'+new Date().toISOString().slice(0,10)+'.pdf'); }
+  function ej(){ var data={history:t.slice(0,u+1), exportDate:new Date().toISOString()}; var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='areaCalc247_export_'+new Date().toISOString().slice(0,10)+'.json'; a.click(); }
+  function im(file){ var reader=new FileReader(); reader.onload=function(e){ try{ var imported=JSON.parse(e.target.result); if(imported.history&&Array.isArray(imported.history)){ t=imported.history; u=t.length-1; stl(); rht(); alert('History imported successfully.'); }else{ alert('Invalid file structure.'); } }catch(ex){ alert('Error parsing JSON.'); } }; reader.readAsText(file); }
+  function init(){ 
+    [a,b,c,d,e,f].forEach(function(el){ el.addEventListener('input', x); });
+    document.getElementById('calculateBtn').addEventListener('click', cc);
+    document.getElementById('clearBtn').addEventListener('click', caf);
+    document.getElementById('addToHistoryBtn').addEventListener('click', ath);
+    document.getElementById('undoBtn').addEventListener('click', ud);
+    document.getElementById('redoBtn').addEventListener('click', rd);
+    document.getElementById('clearHistoryBtn').addEventListener('click', ch);
+    document.getElementById('exportExcelBtn').addEventListener('click', ee);
+    document.getElementById('exportPdfBtn').addEventListener('click', ep);
+    document.getElementById('exportJsonBtn').addEventListener('click', ej);
+    document.getElementById('importJsonBtn').addEventListener('click', function(){ document.getElementById('fileImportInput').click(); });
+    document.getElementById('fileImportInput').addEventListener('change', function(e){ if(e.target.files[0]) im(e.target.files[0]); e.target.value=''; });
+    document.querySelectorAll('input').forEach(function(inp){ inp.addEventListener('keypress', function(e){ if(e.key==='Enter') cc(); }); });
+    lfl();
+    x();
+    cc();
+  }
+  init();
+})();
+</script>
 </body>
 </html>
